@@ -1,0 +1,93 @@
+{
+  "estrategia": "MONOLITICA",
+  "cenario": "trafego",
+  "seed": 42,
+  "camadas": 4,
+  "visibilidade": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "elementos_sinteticos": 0,
+  "resolucao": [
+    1370,
+    749
+  ],
+  "gpu": "AMD Radeon(TM) Vega 8 Graphics",
+  "simulacao": {
+    "altitude": 8500.0,
+    "velocidade": 280.0,
+    "rumo": 120.0,
+    "pitch": 0.06,
+    "roll": 0.13,
+    "vertical_speed": 4.7,
+    "temperatura_oleo": 52.0,
+    "pressao_oleo": 48.0,
+    "n1_rpm": 84.1,
+    "egt": 600.3,
+    "combustivel": 4500.0,
+    "estado": "TRAFEGO PROXIMO",
+    "nivel_alerta": 1,
+    "mensagens_alerta": [
+      "TCAS: TRAFFIC ADVISORY"
+    ],
+    "distancia_waypoint": 14.8,
+    "nome_waypoint": "BRS01",
+    "trajetoria_pontos": [
+      [
+        -0.4,
+        -0.3
+      ],
+      [
+        -0.2,
+        -0.1
+      ],
+      [
+        0.0,
+        0.2
+      ],
+      [
+        0.3,
+        0.5
+      ],
+      [
+        0.5,
+        0.8
+      ]
+    ],
+    "tcas_alvos": [
+      {
+        "x": -0.29977500303748766,
+        "y": 0.40016249885573163,
+        "rel_alt": "+12",
+        "alerta": false
+      },
+      {
+        "x": 0.521157489014235,
+        "y": 0.22112412872635095,
+        "rel_alt": "-08",
+        "alerta": true
+      },
+      {
+        "x": 0.12263788323902965,
+        "y": -0.47733566793512594,
+        "rel_alt": "+24",
+        "alerta": false
+      },
+      {
+        "x": -0.5966948879861921,
+        "y": -0.19663294697512562,
+        "rel_alt": "-15",
+        "alerta": false
+      }
+    ],
+    "nome_missao": "SENTINELA / RECONHECIMENTO AEREO",
+    "cenario": "trafego",
+    "tempo": 0.05,
+    "focos_detectados": 0,
+    "temperatura_foco": 24.0,
+    "bateria": 98.0,
+    "area_monitorada": 2.4
+  }
+}

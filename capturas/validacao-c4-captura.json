@@ -1,0 +1,94 @@
+{
+  "estrategia": "MULTICAMADA",
+  "cenario": "incendio",
+  "seed": 42,
+  "camadas": 4,
+  "visibilidade": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "elementos_sinteticos": 100000,
+  "resolucao": [
+    1370,
+    749
+  ],
+  "gpu": "AMD Radeon(TM) Vega 8 Graphics",
+  "simulacao": {
+    "altitude": 8500.0,
+    "velocidade": 280.0,
+    "rumo": 120.0,
+    "pitch": 2.5,
+    "roll": 0.0,
+    "vertical_speed": 350.0,
+    "temperatura_oleo": 52.0,
+    "pressao_oleo": 48.0,
+    "n1_rpm": 84.5,
+    "egt": 610.0,
+    "combustivel": 4500.0,
+    "estado": "FOCOS DE CALOR DETECTADOS",
+    "nivel_alerta": 2,
+    "mensagens_alerta": [
+      "ALERTA: INCENDIO FLORESTAL",
+      "SENSOR IR: 3 FOCOS ATIVOS"
+    ],
+    "distancia_waypoint": 14.8,
+    "nome_waypoint": "BRS01",
+    "trajetoria_pontos": [
+      [
+        -0.4,
+        -0.3
+      ],
+      [
+        -0.2,
+        -0.1
+      ],
+      [
+        0.0,
+        0.2
+      ],
+      [
+        0.3,
+        0.5
+      ],
+      [
+        0.5,
+        0.8
+      ]
+    ],
+    "tcas_alvos": [
+      {
+        "x": -0.3,
+        "y": 0.4,
+        "rel_alt": "+12",
+        "alerta": false
+      },
+      {
+        "x": 0.5210367746201974,
+        "y": 0.22103677462019744,
+        "rel_alt": "-08",
+        "alerta": false
+      },
+      {
+        "x": 0.12273243567064204,
+        "y": -0.47726756432935796,
+        "rel_alt": "+24",
+        "alerta": false
+      },
+      {
+        "x": -0.5964719997985033,
+        "y": -0.19647199979850333,
+        "rel_alt": "-15",
+        "alerta": false
+      }
+    ],
+    "nome_missao": "SENTINELA / RECONHECIMENTO AEREO",
+    "cenario": "incendio",
+    "tempo": 0.0,
+    "focos_detectados": 3,
+    "temperatura_foco": 386.0,
+    "bateria": 98.0,
+    "area_monitorada": 2.4
+  }
+}
