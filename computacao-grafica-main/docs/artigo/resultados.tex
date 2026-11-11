@@ -1,0 +1,51 @@
+A coleta ocorreu em 21 de outubro de 2026, no Windows 10, Python 3.14.7 e AMD Radeon Vega 8, com OpenGL 3.3. Foram medidos 4.320 quadros (540 por combinação) após descartar 1.440 de aquecimento. O destino offscreen de C4 manteve $1920\times1080$ pixels, apesar dos limites do monitor.
+
+\begin{table}[t]
+
+\centering
+
+\caption{Resultados agregados de três repetições.}
+
+\label{tab:resultados}
+
+\begin{tabular}{llrrr}
+
+\toprule
+
+Config. & Modo & Média (ms) & P99 (ms) & FPS \\
+
+\midrule
+
+C1 & Mono & 20.83 & 28.38 & 48.01 \\
+
+C1 & Multi & 23.19 & 31.71 & 43.13 \\
+
+C2 & Mono & 21.30 & 30.68 & 46.94 \\
+
+C2 & Multi & 23.81 & 35.09 & 42.00 \\
+
+C3 & Mono & 20.87 & 27.57 & 47.91 \\
+
+C3 & Multi & 24.16 & 27.74 & 41.40 \\
+
+C4 & Mono & 30.76 & 47.63 & 32.51 \\
+
+C4 & Multi & 34.43 & 45.08 & 29.05 \\
+
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+
+A média multicamada foi maior nas quatro configurações: 11.3\%, 11.8\%, 15.7\%, 11.9\%, respectivamente. Esse resultado é compatível com o custo adicional de destinos intermediários e passes de tela cheia. Ele não isola o tempo de cada mecanismo, pois a medida conjunta inclui CPU, rasterização e sincronização.
+
+Em C4, as médias foram 30,76 ms (monolítica) e 34,43 ms (multicamada), correspondendo a 32,51 e 29,05 FPS. O P99 multicamada, 45,08 ms, foi inferior aos 47,63 ms monolíticos nessa coleta. Portanto, média e cauda não devem ser confundidas, nem se pode concluir superioridade temporal geral por uma única métrica.
+
+Todos os quadros medidos ultrapassaram o orçamento de 16,67 ms. A cena desta avaliação não sustentou 60 FPS sincronizados nessa máquina. A fluidez interativa observada em outras condições não altera esse resultado do experimento.
+
+Os valores de C1 a C3 permaneceram próximos e não cresceram monotonicamente com a carga. O custo da cena 3D, a posição concentrada dos retângulos e a variação do sistema limitam inferências sobre escalabilidade. C4 altera simultaneamente resolução e carga; esse contraste não permite atribuir a diferença exclusivamente a uma delas.
+
+A RSS média variou aproximadamente de 96 a 120 MiB. Essa medida inclui Python e caches do driver no processo compartilhado; não deve ser interpretada como memória exclusiva dos FBOs. Para quatro texturas RGBA8 em 1080p, apenas os anexos de cor intermediários somam cerca de 31,64 MiB, excluindo alvos finais, buffers e overhead do driver.
+
+Os arquivos de amostras, resumos por repetição, capturas e metadados estão preservados na execução \texttt{20261021T030448Z\_7e3fc562}. Gráficos apresentam dispersão e médias; nenhuma diferença foi submetida a teste de significância.
