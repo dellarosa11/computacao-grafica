@@ -1,6 +1,7 @@
 """Estação AERIS: missão de inspeção de incêndios, em quatro camadas gráficas."""
 import math
 import numpy as np
+from configuracoes import CONFIGURACOES_EXPERIMENTAIS
 
 FUNDO = (.025,.043,.067)
 PAINEL = (.040,.065,.094)
@@ -294,6 +295,47 @@ class InterfaceAeronautica:
         self._texto(label,x+.013,y+.029,.025,cor_destaque if ativo else SUAVE)
         return (x,y,w,.058,acao)
 
+    def desenhar_inspecao(self, compositor, estrategia, largura, altura):
+        """Mostra as imagens deste quadro antes de desenhar o HUD."""
+        ctx = compositor.ctx
+        multi = estrategia == 'MULTICAMADA'
+        if multi:
+            nomes = (('Terreno', 'Navegação', 'Instrumentos', 'Alertas') if compositor.num_camadas == 4
+                     else ('Terreno e navegação', 'Instrumentos e alertas'))
+        else:
+            # A cena já foi desenhada na janela. Esta cópia serve apenas à prévia.
+            ctx.copy_framebuffer(compositor.obter_fbo(0), ctx.screen)
+            nomes = ('Imagem final da janela',)
+        ctx.screen.use()
+        ctx.screen.clear(*FUNDO, 1)
+        cor = VERDE if multi else AMBAR
+        self._texto('Multicamada' if multi else 'Monolítica', -.95, .52, .055, cor)
+        linhas = (('Cada grupo desenha', 'em sua própria textura.', 'A composição combina', 'as camadas visíveis.')
+                  if multi else ('Todos os grupos', 'desenham em ordem', 'diretamente na janela.'))
+        for i, linha in enumerate(linhas):
+            self._texto(linha, -.95, .36 - i * .065, .029, TEXTO)
+        for i, nome in enumerate(nomes):
+            if multi:
+                lado = .64
+                x = -.38 + (i % 2) * .70
+                y = (.00 - (i // 2) * .72) if len(nomes) == 4 else -.32
+            else:
+                x, y, lado = -.38, -.68, 1.30
+            # Lados iguais em NDC conservam a proporção da textura da janela.
+            viewport = (round((x+1)*largura/2), round((y+1)*altura/2),
+                        max(1, round(lado*largura/2)), max(1, round(lado*altura/2)))
+            ctx.screen.clear(*PAINEL, 1, viewport=viewport)
+            visivel = not multi or compositor.camadas_ativas[i]
+            if visivel:
+                ctx.viewport = viewport
+                compositor.desenhar_textura(i)
+            rotulo = f'F{i+1}  {nome}' if multi else nome
+            if not visivel:
+                rotulo += ' (oculta)'
+            self._moldura(x, y, lado, lado, cor if visivel else BORDA)
+            self._texto(rotulo, x, y+lado+.035, .026, TEXTO if visivel else SUAVE)
+        ctx.viewport = (0, 0, largura, altura)
+
     def desenhar_hud_telemetria(self, estado):
         """Renderiza o HUD superior, botões operacionais e cartões de telemetria."""
         botoes = []
@@ -326,8 +368,10 @@ class InterfaceAeronautica:
         self._circulo(.62,.944,.008,AMBAR if simulacao_pausada else CIANO,True)
         self._texto('PAUSADO' if simulacao_pausada else 'AO VIVO',.64,.944,.024,CIANO)
         self._texto('BR-07 / SIMULAÇÃO',.79,.944,.021,SUAVE)
-        self._texto('Operação Serra do Mar',-.96,.817,.041,TEXTO)
-        self._texto('Inspeção ambiental com drone  /  pesquisa em computação gráfica',-.96,.758,.024,SUAVE)
+        inspecao = estado.get('inspecao', False)
+        self._texto('Inspeção da composição' if inspecao else 'Operação Serra do Mar',-.96,.817,.041,TEXTO)
+        botoes.append(self._botao('Tab  Voltar à missão' if inspecao else 'Tab  Ver composição',
+                                  -.37, .79, .36, 'inspecao', inspecao))
 
         # Botão Estratégia em destaque visual
         is_multi = (estrategia == 'MULTICAMADA')
@@ -383,8 +427,10 @@ class InterfaceAeronautica:
         self._texto(f'CPU {cpu_exibicao:.0f}%    RAM {ram_exibicao_mb:.0f} MB', .52, -.838, .028, TEXTO)
         self._texto(gpu_nome[:32], .52, -.891, .019, SUAVE)
 
-        # Barra de atalhos e mensagens de status
-        self._texto('1–4  PRESETS    G  VISÃO 3D    I  INSTRUMENTOS    P  CAPTURA', -.96, -.964, .022, SUAVE)
+        # Acesso direto às configurações da Tabela I do artigo
+        self._texto('Experimento', -.96, -.964, .022, SUAVE)
+        for i, config in enumerate(CONFIGURACOES_EXPERIMENTAIS):
+            botoes.append(self._botao(config['id'], -.71 + i * .15, -.993, .14, f"preset:{config['id']}"))
         self._texto(mensagem[:65], .03, -.964, .022, CIANO)
 
         # Gráfico histórico de tempos de frame
@@ -405,7 +451,7 @@ class InterfaceAeronautica:
         self._texto('CONTROLES DA ESTAÇÃO', -.65, .65, .049, TEXTO)
         self._texto('Explore a cena e compare o pipeline em tempo real.', -.65, .56, .029, SUAVE)
         linhas = (
-            ('M', 'Alternar monolítica / multicamada'),
+            ('M  /  TAB', 'Trocar estratégia / alternar inspeção e missão'),
             ('1 / 2 / 3 / 4', 'Cargas C1 a C4, de 1 mil a 100 mil elementos'),
             ('S  /  ↑ ↓', 'Ativar carga / alterar quantidade de retângulos'),
             ('C  /  F1–F4', 'Usar 2 ou 4 camadas / alternar visibilidade (3D, NAV, PFD, SYS)'),

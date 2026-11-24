@@ -27,6 +27,6 @@ O artigo é editável e já contém a metodologia, as tabelas da execução vali
 
 O PDF final foi compilado e revisado visualmente em **quatro páginas, duas colunas**, em `../output/pdf/AERIS_artigo.pdf`. As fontes completas para edição e importação no Overleaf estão em `artigo-fontes.zip`.
 
-A numeração C1–C4, suas quantidades e as resoluções são escolhas experimentais do projeto, e não uma tabela prescrita no PDF. O aplicativo utiliza OpenGL 3.3 convencional; seus FBOs não implementam o particionamento de um sistema operacional de tempo real. A cena procedural não utiliza reconstrução neural ou dados geográficos reais.
+Os presets C1–C4 seguem o exemplo da Tabela I do artigo de proposta. A [comparação com a implementação](validacao.md#comparação-com-o-artigo) detalha os parâmetros e as métricas coletadas. O aplicativo utiliza OpenGL 3.3 convencional; seus FBOs não implementam o particionamento de um sistema operacional de tempo real. A cena procedural não utiliza reconstrução neural ou dados geográficos reais.
 
 A coleta registra latência CPU+GPU sincronizada. Ela não estabelece pior caso de execução, certificação ou superioridade temporal automática da composição multicamada. As conclusões no artigo e no relatório seguem os valores efetivamente medidos.

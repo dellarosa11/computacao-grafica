@@ -2,6 +2,21 @@
 
 Coleta realizada em **21/10/2026, a partir de 00:04, horário de São Paulo**, em Windows 10, Python 3.14.7 e AMD Radeon Vega 8 com OpenGL 3.3.
 
+## Comparação com o artigo
+
+O [artigo de proposta](../ComposicaoMulticamada_SistemasAeronauticos.pdf) apresenta a metodologia e uma matriz de exemplo. Os números de desempenho abaixo vêm da coleta do AERIS. A proposta não publica FPS ou latências para comparação numérica.
+
+| Item da proposta | Correspondência no AERIS |
+|---|---|
+| Arquitetura e dados simulados (III-A/B) | Python, GLFW e ModernGL. Há módulos de dados, representação, renderização e composição. A estação de drone simula altitude, velocidade, rumo, temperatura e alertas. O terreno com Gaussianas é uma extensão. |
+| Geometria e composição (III-C/D) | O renderer reutiliza buffers de vértices e desenha primitivas em lotes, sem o buffer de índices proposto. A estratégia monolítica desenha no destino final. A multicamada desenha em FBOs intermediários e combina suas texturas em ordem. |
+| Tabela I (p. 2) | Os presets e os metadados da coleta coincidem nas quatro linhas. C1/C2 usam 1.000/10.000 retângulos e duas camadas em 720p. C3 usa 50.000 e quatro camadas em 720p. C4 usa 100.000 e quatro camadas em 1080p. Os retângulos se somam às 6.000 Gaussianas. |
+| Variação dos parâmetros (III-E) | A proposta menciona três níveis por parâmetro. A Tabela I usa duas resoluções e duas contagens de camadas. O painel permite 0%, 50% e 80% de retângulos transparentes. A coleta publicada usou apenas 50%. |
+| Métricas e qualidade visual (III-F) | Há tempos por quadro, CPU, memória do processo e testes de equivalência de pixels. O FPS do benchmark deriva da latência de renderização em buffer, sem apresentação na janela. A coleta não mede utilização percentual da GPU, VRAM total ou tempo por camada. A hipótese sobre qual componente concentra o custo continua em aberto. |
+| Procedimento (III-G) | Houve aquecimento e três repetições por estratégia na mesma máquina. A duração foi fixada em quadros, com 180 medidos por repetição. O resumo inclui média, desvio-padrão e percentis. |
+
+A bibliografia também mudou. A proposta cita Baek sobre drivers OpenGL SC. A [revisão do AERIS](revisao_bibliografica.md) mantém Barladian e Trompouki/Kosmidis e inclui Kerbl para fundamentar as Gaussianas.
+
 ## Resultado da coleta
 
 - 4 configurações × 2 estratégias × 3 repetições.

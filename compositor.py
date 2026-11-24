@@ -53,6 +53,8 @@ class CompositorMulticamada:
             vertex_shader=VERTEX_SHADER_COMPOSITE,
             fragment_shader=FRAGMENT_SHADER_COMPOSITE,
         )
+        self.prog_composite['u_layer_tex'].value = 0
+        self.prog_composite['u_opacity'].value = 1.0
         
         # Quad de tela cheia (-1 a 1) com UVs (0 a 1)
         quad_verts = np.array([
@@ -140,6 +142,11 @@ class CompositorMulticamada:
     def obter_fbo(self, indice_camada: int) -> moderngl.Framebuffer:
         return self.fbos[indice_camada]
 
+    def desenhar_textura(self, indice):
+        """Desenha a textura RGBA da camada no viewport atual."""
+        self.texturas[indice].use(location=0)
+        self.quad_vao.render(moderngl.TRIANGLES, vertices=6)
+
     def compor(self, fbo_destino=None, cor_fundo=(0.02, 0.03, 0.07, 1.0)):
         """
         Passos 5 e 6 do Algoritmo de Composição (Seção III.D):
@@ -158,15 +165,11 @@ class CompositorMulticamada:
         # Habilita blending para sobreposição correta das camadas transparentes
         configurar_blending(self.ctx)
         
-        self.prog_composite['u_opacity'].value = 1.0
-        
         # Composição sequencial (Camada 0 até N-1)
         for i in range(self.num_camadas):
             if not self.camadas_ativas[i]:
                 continue
-            self.texturas[i].use(location=0)
-            self.prog_composite['u_layer_tex'].value = 0
-            self.quad_vao.render(moderngl.TRIANGLES, vertices=6)
+            self.desenhar_textura(i)
 
     def release(self):
         """Libera recursos explicitamente; chamadas repetidas são seguras."""

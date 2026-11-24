@@ -23,10 +23,12 @@ Se as dependências já estiverem instaladas no Python do sistema, abra **inicia
 
 Os botões do painel também podem ser usados com o mouse. **H** abre a ajuda dentro da aplicação.
 
+Para ver a diferença, clique em **C1** no rodapé e pressione **M**. A inspeção monolítica mostra a imagem desenhada diretamente na janela. Pressione **M** de novo para ver as texturas de cada camada antes da composição. Use **F1–F4** para ocultar grupos e **Tab** para voltar à missão. O FPS do painel inclui o desenho das prévias. Para comparar o custo de renderização, use o benchmark. [Conferência com o artigo e resultados medidos](docs/validacao.md#comparação-com-o-artigo).
+
 | Controle | Ação |
 |---|---|
 | Arrastar o terreno / rolar | Orbitar a câmera / aproximar e afastar |
-| M | Alternar entre monolítica e multicamada |
+| M / Tab | Trocar estratégia e inspecionar / alternar entre inspeção e missão |
 | Espaço | Pausar ou continuar, inclusive a animação da fumaça |
 | N | Alternar cenário normal, tráfego ou incêndio |
 | G / I | Alternar Gaussianas 3D e horizonte / mostrar instrumentos |
@@ -38,7 +40,7 @@ Os botões do painel também podem ser usados com o mouse. **H** abre a ajuda de
 | V / R | Alternar V-Sync / resolução solicitada 720p e 1080p |
 | Home | Reiniciar simulação e câmera com a mesma semente |
 | P | Salvar imagem PNG e estado JSON em `capturas/` |
-| Esc | Fechar ajuda; pressionar novamente para sair |
+| Esc | Fechar a ajuda ou a inspeção. Na missão, sair |
 
 A apresentação inicia com a carga sintética desligada para facilitar a exploração da missão. Cada preset experimental ativa a carga. O número exibido no painel de carga se refere a **retângulos adicionais**, separado das **6.000 Gaussianas 3D** do terreno, fogo e fumaça.
 
@@ -72,7 +74,7 @@ O padrão executa três repetições, com 60 frames de aquecimento descartados e
 | C3 | 50.000 | 4 | 1280 × 720 |
 | C4 | 100.000 | 4 | 1920 × 1080 |
 
-Essa matriz é uma escolha experimental do projeto; o enunciado não prescreve esses valores. Em duas camadas, terreno e navegação são agrupados; instrumentos e alertas formam a outra camada. A quantidade e a ordem de conteúdo permanecem iguais entre estratégias.
+As quatro configurações reproduzem o exemplo da Tabela I, página 2 do [artigo de proposta](ComposicaoMulticamada_SistemasAeronauticos.pdf). No AERIS, a coluna de elementos conta os retângulos adicionais. Em duas camadas, terreno e navegação são agrupados e instrumentos e alertas formam a outra camada. A quantidade e a ordem de conteúdo permanecem iguais entre estratégias.
 
 ```powershell
 # Execução rápida de conferência:

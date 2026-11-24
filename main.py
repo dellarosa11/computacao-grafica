@@ -38,6 +38,7 @@ class AplicacaoAeronautica:
         self.vsync_ativado=not oculto
         self.simulacao_pausada=False
         self.ajuda=False
+        self.inspecao=False
         self.cenario='incendio'
         self.processo=psutil.Process()
         self.processo.cpu_percent()
@@ -111,13 +112,15 @@ class AplicacaoAeronautica:
         glfw.set_window_size(self.window,config['largura'],config['altura'])
         glfw.poll_events()
         self._tratar_redimensionamento(self.window,*glfw.get_framebuffer_size(self.window))
-        self._avisar(f"{config_id}: {self.qtd_elementos:,} retângulos | {self.num_camadas} camadas")
+        carga = f'{self.qtd_elementos:,}'.replace(',', '.')
+        self._avisar(f'{config_id} · {carga} retângulos · {self.num_camadas} camadas')
 
     def _acao(self,acao):
         if acao=='modo':
             self.estrategia='MONOLITICA' if self.estrategia=='MULTICAMADA' else 'MULTICAMADA'
-            desc='Composição em FBOs' if self.estrategia=='MULTICAMADA' else 'Passe único direto (0 FBOs)'
-            self._avisar(f'Estratégia: {self.estrategia} ({desc})')
+            self._mostrar_inspecao(True)
+        elif acao=='inspecao':
+            self._mostrar_inspecao(not self.inspecao)
         elif acao=='pausa':
             self.simulacao_pausada=not self.simulacao_pausada
         elif acao=='estresse':
@@ -161,12 +164,21 @@ class AplicacaoAeronautica:
             self.captura_pendente=RAIZ/'capturas'/f'aeris-{datetime.now():%Y%m%d-%H%M%S-%f}.png'
             self._avisar('Captura salva em capturas/')
 
+    def _mostrar_inspecao(self, ativa):
+        self.inspecao=ativa
+        self.arrastando=False
+        self.tempos.clear()
+        self.fps_exibicao=self.tempo_frame_ms=0
+        self._avisar('M alterna a estratégia. Tab volta à missão.' if ativa else 'Visão da missão')
+
     def _tratar_teclado(self,window,key,scancode,action,mods):
         if action not in (glfw.PRESS,glfw.REPEAT):
             return
         if key==glfw.KEY_ESCAPE and action==glfw.PRESS:
             if self.ajuda:
                 self.ajuda=False
+            elif self.inspecao:
+                self._mostrar_inspecao(False)
             else:
                 glfw.set_window_should_close(window,True)
         if key in (glfw.KEY_UP,glfw.KEY_DOWN):
@@ -177,7 +189,7 @@ class AplicacaoAeronautica:
             return
         mapa={glfw.KEY_M:'modo',glfw.KEY_SPACE:'pausa',glfw.KEY_S:'estresse',glfw.KEY_C:'camadas',
               glfw.KEY_T:'alpha',glfw.KEY_G:'gaussianas',glfw.KEY_I:'instrumentos',glfw.KEY_H:'ajuda',
-              glfw.KEY_N:'cenario',glfw.KEY_HOME:'reiniciar',glfw.KEY_P:'captura'}
+              glfw.KEY_N:'cenario',glfw.KEY_HOME:'reiniciar',glfw.KEY_P:'captura',glfw.KEY_TAB:'inspecao'}
         if key in mapa:
             self._acao(mapa[key])
         elif glfw.KEY_1<=key<=glfw.KEY_4:
@@ -211,7 +223,7 @@ class AplicacaoAeronautica:
             if bx<=x<=bx+bw and by<=y<=by+bh:
                 self._acao(acao)
                 return
-        self.arrastando=(-.95<x<.18 and -.59<y<.59 and not self.ajuda)
+        self.arrastando=(-.95<x<.18 and -.59<y<.59 and not self.inspecao)
         self.ultima_posicao=glfw.get_cursor_pos(window)
 
     def _mover_mouse(self,window,x,y):
@@ -223,7 +235,7 @@ class AplicacaoAeronautica:
 
     def _rolar_mouse(self,window,dx,dy):
         x,y=self._ndc_mouse()
-        if -.95<x<.18 and -.59<y<.59 and self.interface.cena is not None and not self.ajuda:
+        if -.95<x<.18 and -.59<y<.59 and self.interface.cena is not None and not (self.ajuda or self.inspecao):
             self.interface.cena.distancia=max(4,min(28,self.interface.cena.distancia*.90**dy))
 
     def _obter_estado_hud(self):
@@ -232,6 +244,7 @@ class AplicacaoAeronautica:
             'estrategia': self.estrategia,
             'simulacao_pausada': self.simulacao_pausada,
             'ajuda': self.ajuda,
+            'inspecao': self.inspecao,
             'fps_exibicao': self.fps_exibicao,
             'tempo_frame_ms': self.tempo_frame_ms,
             'vsync_ativado': self.vsync_ativado,
@@ -250,6 +263,8 @@ class AplicacaoAeronautica:
         }
 
     def desenhar_hud_telemetria(self):
+        if self.inspecao:
+            self.interface.desenhar_inspecao(self.compositor,self.estrategia,self.largura,self.altura)
         self.botoes = self.interface.desenhar_hud_telemetria(self._obter_estado_hud())
 
     def desenhar_ajuda(self):
@@ -276,7 +291,7 @@ class AplicacaoAeronautica:
             textura.release()
         imagem=Image.frombytes('RGB',(self.largura,self.altura),pixels)
         imagem.transpose(Image.Transpose.FLIP_TOP_BOTTOM).save(caminho)
-        dados={'estrategia':self.estrategia,'cenario':self.cenario,'seed':self.seed,
+        dados={'estrategia':self.estrategia,'inspecao':self.inspecao,'cenario':self.cenario,'seed':self.seed,
                'camadas':self.num_camadas,'visibilidade':self.camadas_visibilidade,
                'elementos_sinteticos':self.qtd_elementos if self.exibir_estresse else 0,
                'resolucao':[self.largura,self.altura],'gpu':self.ctx.info.get('GL_RENDERER'),

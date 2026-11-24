@@ -1,0 +1,199 @@
+{
+  "inicio_utc": "2026-11-24T03:24:08.278432+00:00",
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "executavel_python": "C:\\Users\\mathe\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+  "sistema": "Windows-11-10.0.26200-SP0",
+  "arquitetura": "AMD64",
+  "processador": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+  "cpu_logicas": 12,
+  "opengl": {
+    "GL_VENDOR": "ATI Technologies Inc.",
+    "GL_RENDERER": "AMD Radeon RX 6600",
+    "GL_VERSION": "3.3.0 Core Profile Context 25.10.30.02.250923",
+    "GL_SHADING_LANGUAGE_VERSION": null
+  },
+  "pacotes": {
+    "moderngl": "5.13.0",
+    "glfw": "2.11.0",
+    "numpy": "2.5.2",
+    "matplotlib": "3.11.2",
+    "psutil": "7.2.2",
+    "Pillow": "12.3.0"
+  },
+  "parametros": {
+    "frames_warmup": 60,
+    "frames_medicao": 180,
+    "repeticoes": 6,
+    "transparencia": 0.5,
+    "seed": 42,
+    "cenario": "incendio",
+    "quantidade_gaussianas": 6000
+  },
+  "configuracoes": [
+    {
+      "id": "C2",
+      "nome": "C2 · 10.000 elementos · 2 camadas · 720p",
+      "elementos": 10000,
+      "camadas": 2,
+      "largura": 1280,
+      "altura": 720
+    },
+    {
+      "id": "C4",
+      "nome": "C4 · 100.000 elementos · 4 camadas · 1080p",
+      "elementos": 100000,
+      "camadas": 4,
+      "largura": 1920,
+      "altura": 1080
+    }
+  ],
+  "metodo": {
+    "alvo": "offscreen RGBA8; dimensão exata do preset; sem MSAA",
+    "medida": "latência CPU + GPU sincronizada por ctx.finish por quadro",
+    "inclui": [
+      "construção de primitivas",
+      "envio GL",
+      "renderização",
+      "composição",
+      "ctx.finish"
+    ],
+    "exclui": [
+      "simulação",
+      "geração de estresse",
+      "recursos do processo",
+      "PNG",
+      "eventos",
+      "swap/V-Sync"
+    ],
+    "passo_simulacao_s": 0.016666666666666666,
+    "percentis": "interpolação linear inclusiva",
+    "cpu": "100 * delta CPU processo / delta tempo de parede; coleta completa; pode exceder 100%",
+    "ram": "RSS processo amostrada fora da duração do quadro; MiB; não mede VRAM",
+    "ordem": "alternada por repetição e configuração",
+    "nao_e_wcet": true
+  },
+  "ordem_execucao": [
+    {
+      "config_id": "C2",
+      "repeticao": 1,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 1,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 2,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 2,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 3,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 3,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 4,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 4,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 5,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 5,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 6,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C2",
+      "repeticao": 6,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 1,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 1,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 2,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 2,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 3,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 3,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 4,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 4,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 5,
+      "estrategia": "Multicamada"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 5,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 6,
+      "estrategia": "Monolítica"
+    },
+    {
+      "config_id": "C4",
+      "repeticao": 6,
+      "estrategia": "Multicamada"
+    }
+  ],
+  "estado": "concluido",
+  "fim_utc": "2026-11-24T03:25:19.087974+00:00"
+}
